@@ -1,0 +1,9 @@
+sentence-transformers
+transformers
+torch
+tiktoken
+pypdf
+langchain
+chromadb # Vector storage
+pytest
+boto3
