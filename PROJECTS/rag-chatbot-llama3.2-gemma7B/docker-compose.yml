@@ -1,0 +1,28 @@
+
+services:
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - "11434:11434"
+    command: ollama serve
+    networks:
+      - shared_network
+    entrypoint: /bin/bash -c "ollama pull llama3.2:1b && exec ollama serve"
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8501:8501"
+    environment:
+      - OLLAMA_HOST=http://ollama:11434
+    depends_on:
+      - ollama
+    networks:
+      - shared_network
+    command: streamlit run main.py --server.port=8501 --server.enableCORS=false
+
+networks:
+  shared_network:
+    driver: bridge
